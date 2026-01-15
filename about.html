@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About 6ixth</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Archivo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="nav-brand">6ixth</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link active">About</a></li>
+                <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode"><i class="fas fa-moon"></i></button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- About Hero -->
+        <header class="about-hero container">
+            <span class="section-label">About Me</span>
+            <h1 class="hero-title">The story behind<br>the work.</h1>
+        </header>
+
+        <!-- Bio Section -->
+        <section class="container">
+            <div style="max-width: 800px;">
+                <h2 style="margin-bottom: 2rem;">My Journey</h2>
+                <div class="intro-text" style="font-size: 1.2rem; font-family: var(--font-body);">
+                    <p style="margin-bottom: 1.5rem;">
+                        My path into development wasn't by accident; it was a winding journey through experience, curiosity, and a will to perform. I started with a background in Computer Science, where I fell in love with investigating how things work. But I quickly realized that static code wasn't enough—I wanted my work to be interactive, responsive, and alive.
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        That curiosity led me to web development in 2025. I started learning HTML and CSS, then JavaScript, and eventually dove deep into design systems and user experience principles.
+                    </p>
+                    <p>
+                        Today, I'm focused on creating digital experiences that feel intentional. I believe that the best design isn't just beautiful—it's purposeful, sustainable, and accessible.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="container" style="margin-top: 4rem; margin-bottom: 4rem;">
+            <div class="form-container">
+                <span class="section-label">Get in Touch</span>
+                <h2 style="margin-bottom: 2rem;">Let's start a conversation</h2>
+                
+                <form id="contact-form" class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Jane Doe">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="jane@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Send Message <i class="fas fa-arrow-right" style="margin-left: 0.5rem; font-size: 0.8em;"></i>
+                    </button>
+                    
+                    <div id="form-message" style="margin-top: 1rem; display: none;"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Back Link -->
+        <div class="container" style="margin-bottom: 4rem;">
+            <a href="index.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-arrow-left"></i> Back to Homepage
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 6ixth.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
