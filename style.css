@@ -10,11 +10,11 @@
     --color-text-secondary: #a0a0a0;
     --color-accent: #d4a574; /* Earthy Gold */
     --color-border: #333333;
-    
+
     /* Typography - Liquid Scaling */
     --font-display: 'Crimson Pro', serif;
     --font-body: 'Archivo', sans-serif;
-    
+
     --text-display: clamp(2.5rem, 5vw + 1rem, 5rem);
     --text-h1: clamp(2rem, 4vw + 1rem, 3.5rem);
     --text-h2: clamp(1.5rem, 3vw + 1rem, 2.5rem);
@@ -26,7 +26,7 @@
     --spacing-md: clamp(1.5rem, 3vw, 2.5rem);
     --spacing-lg: clamp(3rem, 5vw, 5rem);
     --spacing-xl: clamp(5rem, 8vw, 8rem);
-    
+
     --border-radius: 4px;
     --transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
@@ -55,6 +55,15 @@ body {
     line-height: 1.6;
     transition: var(--transition);
     overflow-x: hidden;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    body {
+        cursor: auto;
+    }
+    .cursor {
+        display: none;
+    }
 }
 
 /* ===================================
@@ -87,7 +96,7 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: var(--color-bg); 
+    background-color: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
     z-index: 1000;
     padding: var(--spacing-sm) 0;
@@ -219,24 +228,75 @@ section {
     line-height: 1.5;
 }
 
-/* Image */
-.hero-image-container {
-    margin: var(--spacing-md) 0;
-    overflow: hidden;
-    border-radius: var(--border-radius);
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-md);
+}
+
+.project-card {
+    background-color: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
 }
 
-.hero-image {
+.project-card:hover {
+    border-color: var(--color-accent);
+}
+
+.project-image {
     width: 100%;
-    height: auto;
-    display: block;
-    filter: grayscale(20%);
-    transition: filter 0.5s ease;
+    height: 350px;
+    overflow: hidden;
+    position: relative;
 }
 
-.hero-image:hover {
-    filter: grayscale(0%);
+.project-image img {
+    width: 100%;
+    height: 120%; /* For parallax */
+    object-fit: cover;
+    display: block;
+}
+
+.project-info {
+    padding: var(--spacing-md);
+}
+
+.project-info h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    margin-bottom: 0.5rem;
+}
+
+.project-info p {
+    color: var(--color-text-secondary);
+}
+
+/* Experience */
+.experience-list {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.experience-item {
+    position: relative;
+    padding-bottom: var(--spacing-md);
+}
+
+.experience-item::before {
+    content: '';
+    position: absolute;
+    left: calc(-1 * var(--spacing-md) - 5px);
+    top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
 }
 
 /* Skills Cards (Flexbox) */
@@ -365,6 +425,36 @@ section {
 }
 
 /* ===================================
+   CUSTOM CURSOR
+   =================================== */
+.cursor {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+}
+
+.cursor.active {
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-accent);
+    mix-blend-mode: normal;
+}
+
+/* ===================================
+   ANIMATION HELPERS
+   =================================== */
+.reveal-on-scroll {
+    opacity: 0;
+}
+
+/* ===================================
    FOOTER
    =================================== */
 footer {
@@ -385,5 +475,11 @@ footer {
     }
     .hero-title {
         font-size: 2.5rem;
+    }
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    .project-image {
+        height: 250px;
     }
 }

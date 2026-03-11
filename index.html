@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>David | Designer & Developer</title>
+    <title>6ixth | Designer & Developer</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9D4JY8CD40"></script>
@@ -22,14 +25,15 @@
   gtag('config', 'G-9D4JY8CD40');
 </script>
 <body>
+    <div class="cursor"></div>
 
     <!-- Navigation -->
     <nav class="main-nav">
         <div class="container nav-wrapper">
-            <a href="index.html" class="nav-brand">David</a>
+            <a href="index.html" class="nav-brand">6ixth</a>
             <ul class="nav-links">
                 <a href="https://github.com/Dave-dDev" class="nav-link"><i class="fab fa-github"></i></a>
-                <a href="https://www.linkedin.com/in/david-adejumo-9b0574312/" class="nav-link"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.linkedin.com/in/6ixth/" class="nav-link"><i class="fab fa-linkedin"></i></a>
                 <a href="https://x.com/d_Novice_Dev" class="nav-link"><i class="fab fa-twitter"></i></a>
                 <li><a href="index.html" class="nav-link active">Home</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
@@ -41,34 +45,66 @@
     <main id="main-content">
         <!-- Hero Section -->
         <header class="hero container">
-            <span class="hero-badge">Developer & Designer</span>
+            <span class="hero-badge reveal-on-scroll">Developer & Designer</span>
             <h1 class="hero-title">Building the Web's future<br>one component at a time.</h1>
-            <p class="hero-subtitle">Based in Nigeria. Specializing in sustainable, high-performance digital experiences.</p>
+            <p class="hero-subtitle reveal-on-scroll">Based in Nigeria. Specializing in sustainable, high-performance digital experiences.</p>
         </header>
 
         <!-- Intro Section -->
         <section class="container">
-            <span class="section-label">Introduction</span>
-            <p class="intro-text">
-                Hello! I'm David. A multidisciplinary designer and developer connecting aesthetic beauty with functional, human-centered design principles. I'm based in Lagos, Nigeria and I'm passionate about creating digital experiences that are both beautiful and functional.Ready to network and collaborate on your next project.
+            <span class="section-label reveal-on-scroll">Introduction</span>
+            <p class="intro-text reveal-on-scroll">
+                Hello! I'm 6ixth. A multidisciplinary designer and developer connecting aesthetic beauty with functional, human-centered design principles. I'm based in Lagos, Nigeria and I'm passionate about creating digital experiences that are both beautiful and functional. Ready to network and collaborate on your next project.
             </p>
         </section>
 
-        <br>
+        <!-- Projects Section -->
+        <section class="container">
+            <span class="section-label reveal-on-scroll">Featured Projects</span>
+            <div class="projects-grid">
+                <div class="project-card reveal-on-scroll">
+                    <div class="project-image">
+                        <img src="1000320845.jpg" alt="Sustainable Design" class="parallax-img">
+                    </div>
+                    <div class="project-info">
+                        <h3>Sustainable Design</h3>
+                        <p>Minimalist web architectures focused on low carbon footprints and high performance.</p>
+                    </div>
+                </div>
+                <div class="project-card reveal-on-scroll">
+                    <div class="project-image">
+                        <img src="christine-donaldson-u8zXhfJawOM-unsplash.jpg" alt="Performance Analytics" class="parallax-img">
+                    </div>
+                    <div class="project-info">
+                        <h3>Performance Analytics</h3>
+                        <p>Complex data visualizations transformed into intuitive, interactive dashboards.</p>
+                    </div>
+                </div>
+                <div class="project-card reveal-on-scroll">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" alt="Cloud Architecture" class="parallax-img">
+                    </div>
+                    <div class="project-info">
+                        <h3>Cloud Architecture</h3>
+                        <p>Scalable cloud-native solutions designed for resilience and global distribution.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Experience Section -->
         <section class="container">
-            <span class="section-label">Experience</span>
+            <span class="section-label reveal-on-scroll">Experience</span>
             <div class="experience-list">
-                <div class="experience-item">
+                <div class="experience-item reveal-on-scroll">
                     <h3 class="experience-title">Frontend Developer</h3>
-                    <p class="experience-subtitle">Intern 
+                    <p class="experience-subtitle">Intern
                         <br>July 2025 — October 2025
                     </p>
                     <p class="experience-text">Building accessible and performant web experiences with a focus on clean architecture and user-centric design.</p>
                 </div>
                 <br>
-                <div class="experience-item">
+                <div class="experience-item reveal-on-scroll">
                     <h3 class="experience-title">Frontend Developer</h3>
                     <p class="experience-subtitle">Freelance
                         <br>July 2025 — Present
@@ -78,58 +114,56 @@
             </div>
         </section>
 
-        <br>
-
         <!-- Skills Section -->
         <section class="container">
-            <span class="section-label">Expertise</span>
+            <span class="section-label reveal-on-scroll">Expertise</span>
             <div class="skills-grid">
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-html5 skill-icon"></i>
                     <h3 class="skill-title">HTML5</h3>
                     <p>Semantic, accessible markup.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-css3-alt skill-icon"></i>
                     <h3 class="skill-title">CSS3</h3>
                     <p>Modern layouts, animations, and systems.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-js skill-icon"></i>
                     <h3 class="skill-title">JavaScript</h3>
                     <p>Dynamic interactions and logic.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-node skill-icon"></i>
                     <h3 class="skill-title">Node.js</h3>
                     <p>Scalable backend solutions.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-react skill-icon"></i>
                     <h3 class="skill-title">React</h3>
                     <p>Building accessible and performant web experiences with a focus on clean architecture and user-centric design.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-sass skill-icon"></i>
                     <h3 class="skill-title">Sass</h3>
                     <p>Building accessible and performant web experiences with a focus on clean architecture and user-centric design.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-git skill-icon"></i>
                     <h3 class="skill-title">Git</h3>
                     <p>Version control and collaboration.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="fab fa-figma skill-icon"></i>
                     <h3 class="skill-title">Figma</h3>
                     <p>Building accessible and performant web experiences with a focus on clean architecture and user-centric design.</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="skill-icon fa-brands fa-npm"></i>
                     <h3 class="skill-title">npm</h3>
                     <p>Package Management for JavaScript Projects</p>
                 </div>
-                <div class="skill-card">
+                <div class="skill-card reveal-on-scroll">
                     <i class="skill-icon fa-brands fa-github"></i>
                     <h3 class="skill-title">GitHub</h3>
                     <p>Access control, bug tracking, software feature requests, task management, continuous integration, for every project.</p>
@@ -138,42 +172,40 @@
         </section>
 
 
-        <br>
-
         <!-- Hobbies Section -->
         <section class="container">
-            <span class="section-label">Beyond Code</span>
-            <h2 style="margin-bottom: 2rem;">Interests & Hobbies</h2>
+            <span class="section-label reveal-on-scroll">Beyond Code</span>
+            <h2 class="reveal-on-scroll" style="margin-bottom: 2rem;">Interests & Hobbies</h2>
             <ul class="hobbies-list">
-                <li class="hobby-item">
+                <li class="hobby-item reveal-on-scroll">
                     <span class="hobby-icon">📸</span>
                     <div>
                         <h3>Photography</h3>
                         <p>Capturing moments and light.</p>
                     </div>
                 </li>
-                <li class="hobby-item">
+                <li class="hobby-item reveal-on-scroll">
                     <span class="hobby-icon">🎮</span>
                     <div>
                         <h3>Gaming</h3>
                         <p>Exploring immersive worlds.</p>
                     </div>
                 </li>
-                <li class="hobby-item">
+                <li class="hobby-item reveal-on-scroll">
                     <span class="hobby-icon">🎨</span>
                     <div>
                         <h3>Analog Art</h3>
                         <p>Sketching and mixed media.</p>
                     </div>
                 </li>
-                <li class="hobby-item">
+                <li class="hobby-item reveal-on-scroll">
                     <span class="hobby-icon">🎵</span>
                     <div>
                         <h3>Music</h3>
                         <p>Exploring immersive worlds.</p>
                     </div>
                 </li>
-                <li class="hobby-item">
+                <li class="hobby-item reveal-on-scroll">
                     <span class="hobby-icon">📖</span>
                     <div>
                         <h3>Reading</h3>
@@ -184,7 +216,7 @@
         </section>
 
         <!-- CTA Section -->
-        <section class="container" style="text-align: center; margin-top: 4rem;">
+        <section class="container reveal-on-scroll" style="text-align: center; margin-top: 4rem;">
             <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Let's work together</h2>
             <p style="margin-bottom: 2rem; color: var(--color-text-secondary);">Have a project in mind? I'd love to hear about it.</p>
             <a href="about.html" class="btn-primary">Get in Touch</a>
@@ -201,4 +233,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
