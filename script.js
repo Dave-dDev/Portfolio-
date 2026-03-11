@@ -6,35 +6,33 @@
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initForm();
-  initAnimations();
+  initCustomCursor();
+  initGsapAnimations();
 });
 
 /**
  * Theme Management
- * Handles toggle between Dark (default for sustainability) and Light mode.
- * Uses local storage to remember preference.
  */
 function initTheme() {
   const toggleBtn = document.getElementById("theme-toggle");
+  if (!toggleBtn) return;
+
   const icon = toggleBtn.querySelector("i");
-  const prefersLight = window.matchMedia(
-    "(prefers-color-scheme: light)"
-  ).matches;
+  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
   const storedTheme = localStorage.getItem("theme");
 
-  // Default to dark unless user strictly prefers light or has saved light
   let isLight = storedTheme === "light" || (!storedTheme && prefersLight);
 
   function updateTheme() {
     document.body.setAttribute("data-theme", isLight ? "light" : "dark");
-    icon.className = isLight ? "fas fa-sun" : "fas fa-moon";
+    if (icon) {
+      icon.className = isLight ? "fas fa-sun" : "fas fa-moon";
+    }
     localStorage.setItem("theme", isLight ? "light" : "dark");
   }
 
-  // Initial Set
   updateTheme();
 
-  // Toggle Handler
   toggleBtn.addEventListener("click", () => {
     isLight = !isLight;
     updateTheme();
@@ -42,8 +40,112 @@ function initTheme() {
 }
 
 /**
+ * Custom Cursor Logic
+ */
+function initCustomCursor() {
+  const cursor = document.querySelector(".cursor");
+
+  if (!cursor) return;
+
+  // Only hide default cursor if we have the custom one
+  document.body.style.cursor = "none";
+
+  gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+
+  window.addEventListener("mousemove", (e) => {
+    gsap.to(cursor, {
+      x: e.clientX,
+      y: e.clientY,
+      duration: 0.15,
+      ease: "power2.out"
+    });
+  });
+
+  const interactiveElements = document.querySelectorAll("a, button, .project-card, .skill-card");
+
+  interactiveElements.forEach((el) => {
+    el.addEventListener("mouseenter", () => {
+      cursor.classList.add("active");
+      gsap.to(cursor, { scale: 3, duration: 0.3 });
+    });
+    el.addEventListener("mouseleave", () => {
+      cursor.classList.remove("active");
+      gsap.to(cursor, { scale: 1, duration: 0.3 });
+    });
+  });
+}
+
+/**
+ * GSAP & ScrollTrigger Animations
+ */
+function initGsapAnimations() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Staggered reveal for elements
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+
+  revealElements.forEach((el) => {
+    gsap.fromTo(el,
+      {
+        opacity: 0,
+        y: 50
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          toggleActions: "play none none none"
+        }
+      }
+    );
+  });
+
+  // Parallax effect for project images
+  const parallaxImages = document.querySelectorAll(".parallax-img");
+
+  parallaxImages.forEach((img) => {
+    gsap.to(img, {
+      y: -60,
+      ease: "none",
+      scrollTrigger: {
+        trigger: img.parentElement,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+
+    // Hover effect via GSAP to avoid transition conflicts
+    const card = img.closest('.project-card');
+    if (card) {
+        card.addEventListener('mouseenter', () => {
+            gsap.to(img, { scale: 1.1, duration: 0.6, ease: "power2.out" });
+        });
+        card.addEventListener('mouseleave', () => {
+            gsap.to(img, { scale: 1, duration: 0.6, ease: "power2.out" });
+        });
+    }
+  });
+
+  // Special entrance for Hero Title
+  const heroTitle = document.querySelector(".hero-title");
+  if (heroTitle) {
+      gsap.from(heroTitle, {
+        opacity: 0,
+        y: 80,
+        duration: 1.5,
+        ease: "expo.out",
+        delay: 0.2
+      });
+  }
+}
+
+/**
  * Form Validation & Interaction
- * Prevents default submission for demo purposes and shows success message.
  */
 function initForm() {
   const form = document.getElementById("contact-form");
@@ -54,13 +156,11 @@ function initForm() {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    // Basic Validation (HTML5 handles most, checking non-empty logic just in case)
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const message = document.getElementById("message").value;
 
     if (name && email && message) {
-      // Simulate sending
       const btn = form.querySelector('button[type="submit"]');
       const originalText = btn.innerHTML;
 
@@ -81,41 +181,11 @@ function initForm() {
         setTimeout(() => {
           btn.innerHTML = originalText;
           btn.disabled = false;
-          btn.style.backgroundColor = ""; // Reset to default CSS
+          btn.style.backgroundColor = "";
           btn.style.color = "";
           msgDiv.style.display = "none";
         }, 3000);
       }, 1500);
     }
-  });
-}
-
-/**
- * Simple Intersection Observer for scroll animations
- * Adds 'visible' class to elements when they scroll into view
- */
-function initAnimations() {
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = "1";
-          entry.target.style.transform = "translateY(0)";
-        }
-      });
-    },
-    { threshold: 0.1 }
-  );
-
-  // Select elements to animate
-  const animatedElements = document.querySelectorAll(
-    ".skill-card, .hobby-item, .section-label, h1, h2, p"
-  );
-
-  animatedElements.forEach((el) => {
-    el.style.opacity = "0";
-    el.style.transform = "translateY(20px)";
-    el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-    observer.observe(el);
   });
 }
