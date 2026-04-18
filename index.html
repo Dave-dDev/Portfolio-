@@ -1389,27 +1389,13 @@
     const grid = document.getElementById('projects-grid');
     const filtered = repos.filter(r => !r.fork).slice(0, 9);
 
-    // Custom descriptions for distinct project definitions
-    const customDescriptions = {
-      'portfolio-website': 'A responsive personal portfolio website built with HTML, CSS, and JavaScript, featuring modern design and interactive elements.',
-      'javascript-projects': 'A curated collection of vanilla JavaScript mini-projects exploring DOM manipulation, event handling, and ES6+ features.',
-      'react-app': 'A modern React application demonstrating component architecture, hooks, state management, and seamless API integrations.',
-      'vue-project': 'A Vue.js application showcasing progressive framework features, component reusability, and reactive data binding.',
-      'node-api': 'A Node.js backend API built with Express, featuring RESTful endpoints, database integration, and authentication.',
-      'python-script': 'A Python utility script for data processing, automation, or analysis, utilizing libraries like Pandas and NumPy.',
-      'ml-model': 'A machine learning project implementing predictive models with scikit-learn, including data preprocessing and evaluation.',
-      'full-stack-app': 'A full-stack web application combining frontend and backend technologies for a complete user experience.',
-      'ui-components': 'A library of reusable UI components built with modern CSS and JavaScript for consistent design systems.'
-    };
-
     if (!filtered.length) { renderFallback(); return; }
 
     grid.innerHTML = filtered.map((repo, i) => {
       const lang = repo.language || 'HTML';
       const color = langColors[lang] || langColors.default;
       const num = String(i + 1).padStart(2, '0');
-      const repoKey = repo.name.toLowerCase().replace(/[-_]/g, '-');
-      const desc = customDescriptions[repoKey] || repo.description || 'A frontend development project exploring modern web technologies.';
+      const desc = repo.description || 'A frontend project built with passion and clean code.';
       const stars = repo.stargazers_count || 0;
       const forks = repo.forks_count || 0;
 
@@ -1436,9 +1422,9 @@
   function renderFallback() {
     const grid = document.getElementById('projects-grid');
     const fallback = [
-      { name: 'Portfolio Website', lang: 'HTML', desc: 'A responsive personal portfolio website built with HTML, CSS, and JavaScript, featuring modern design and interactive elements.', stars: 0 },
-      { name: 'JavaScript Projects', lang: 'JavaScript', desc: 'A curated collection of vanilla JavaScript mini-projects exploring DOM manipulation, event handling, and ES6+ features.', stars: 0 },
-      { name: 'React App', lang: 'JavaScript', desc: 'A modern React application demonstrating component architecture, hooks, state management, and seamless API integrations.', stars: 0 },
+      { name: 'Portfolio Website', lang: 'HTML', desc: 'A personal portfolio showcasing frontend projects and skills.', stars: 0 },
+      { name: 'JavaScript Projects', lang: 'JavaScript', desc: 'A collection of vanilla JS mini-projects and experiments.', stars: 0 },
+      { name: 'React App', lang: 'JavaScript', desc: 'A modern React application with hooks, state management and API integration.', stars: 0 },
     ];
 
     grid.innerHTML = fallback.map((repo, i) => {
