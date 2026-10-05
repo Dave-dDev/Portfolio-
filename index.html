@@ -64,6 +64,22 @@
       scroll-behavior: smooth;
     }
 
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background-color: var(--bg-color);
@@ -916,15 +932,16 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
       text-decoration: none;
       color: inherit;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
 
     .featured-card:hover {
       border-color: var(--card-border-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 15px 35px -10px rgba(129, 140, 248, 0.15);
+      box-shadow: 0 15px 35px -10px rgba(129, 140, 248, 0.18);
       background-color: rgba(255, 255, 255, 0.04);
     }
 
@@ -935,13 +952,15 @@
       background-color: #0b0f19;
       position: relative;
       border-bottom: 1px solid var(--card-border);
+      cursor: pointer;
     }
 
     .featured-img-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: block;
     }
 
     .featured-card:hover .featured-img-container img {
@@ -999,6 +1018,7 @@
 
     .featured-links {
       display: flex;
+      align-items: center;
       gap: 1.25rem;
       border-top: 1px dashed var(--card-border);
       padding-top: 1rem;
@@ -1014,11 +1034,17 @@
       gap: 0.35rem;
       color: var(--text-muted);
       text-decoration: none;
-      transition: color 0.25s;
+      transition: color 0.25s, transform 0.2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
     }
 
     .featured-link-btn:hover {
       color: var(--primary);
+      transform: translateX(2px);
     }
 
     .featured-link-btn svg {
@@ -1027,6 +1053,250 @@
       stroke: currentColor;
       stroke-width: 2.2;
       fill: none;
+    }
+
+    .featured-preview-btn {
+      color: var(--primary);
+      background: var(--primary-glow);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid rgba(129, 140, 248, 0.2);
+    }
+
+    .featured-preview-btn:hover {
+      background: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Card Image Hover Overlay */
+    .featured-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8, 10, 16, 0.85) 0%, rgba(8, 10, 16, 0.3) 60%, transparent 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 2;
+    }
+
+    .featured-card:hover .featured-img-overlay {
+      opacity: 1;
+    }
+
+    .preview-badge-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(15, 20, 35, 0.85);
+      border: 1.5px solid var(--primary);
+      color: var(--text-main);
+      padding: 0.55rem 1.1rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: 0 8px 25px -5px rgba(129, 140, 248, 0.4);
+      backdrop-filter: blur(10px);
+      transform: translateY(10px);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s;
+    }
+
+    .featured-card:hover .preview-badge-btn {
+      transform: translateY(0);
+    }
+
+    .preview-badge-btn svg {
+      stroke: var(--primary);
+    }
+
+    /* ─── PROJECT PREVIEW MODAL ─── */
+    .preview-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 14, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+    }
+
+    .preview-modal-backdrop.open {
+      display: flex;
+    }
+
+    .preview-modal-card {
+      background: #0d121f;
+      border: 1px solid rgba(129, 140, 248, 0.25);
+      border-radius: 26px;
+      max-width: 860px;
+      width: 100%;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.85), 0 0 50px -10px rgba(129, 140, 248, 0.2);
+      overflow: hidden;
+      position: relative;
+    }
+
+    [data-theme="light"] .preview-modal-card {
+      background: #ffffff;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.25), 0 0 40px -10px rgba(99, 102, 241, 0.15);
+    }
+
+    .preview-modal-header {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .preview-modal-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .preview-modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .preview-modal-close-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      width: 2.35rem;
+      height: 2.35rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: all 0.25s ease;
+    }
+
+    .preview-modal-close-btn:hover {
+      background: var(--primary-glow);
+      border-color: var(--primary);
+      color: var(--text-main);
+      transform: rotate(90deg);
+    }
+
+    .preview-modal-body {
+      padding: 1.5rem 1.75rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .preview-frame-wrap {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      background: #080a10;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .preview-browser-bar {
+      padding: 0.65rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .browser-url-bar {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.35rem 0.85rem;
+      border-radius: 8px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .preview-image-container {
+      width: 100%;
+      max-height: 380px;
+      overflow: hidden;
+      position: relative;
+      background-color: #0b0f19;
+    }
+
+    .preview-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .preview-highlight-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      line-height: 1.4;
+    }
+
+    .preview-highlight-pill svg {
+      shrink: 0;
+      color: var(--accent);
+    }
+
+    .preview-modal-footer {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
     }
 
     .section-subtitle {
@@ -1533,12 +1803,58 @@
 
         <!-- Featured hosted projects with screenshots -->
         <h3 class="section-subtitle">Featured Client Projects</h3>
-        <div class="featured-grid">
+        <div class="featured-grid" id="featured-projects-container">
           
+          <!-- StudyPath -->
+          <div class="featured-card" data-project-id="studypath">
+            <div class="featured-img-container" onclick="openPreviewModal('studypath')" title="Click to preview StudyPath">
+              <img src="./studypath.png" alt="StudyPath AI Study Platform Mockup" loading="lazy">
+              <div class="featured-img-overlay">
+                <span class="preview-badge-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Quick Preview
+                </span>
+              </div>
+            </div>
+            <div class="featured-info">
+              <div>
+                <div class="featured-meta">
+                  <div class="featured-tags">
+                    <span class="featured-tag">Next.js</span>
+                    <span class="featured-tag">React</span>
+                    <span class="featured-tag">Tailwind CSS</span>
+                    <span class="featured-tag">TypeScript</span>
+                    <span class="featured-tag">AI / NLP</span>
+                  </div>
+                </div>
+                <h3 class="featured-title">StudyPath</h3>
+                <p class="featured-desc">
+                  An intelligent AI-powered study platform that transforms raw notes and textbooks into personalised quizzes, SM-2 spaced repetition flashcards, and Feynman summaries in seconds.
+                </p>
+              </div>
+              <div class="featured-links">
+                <a href="https://study-path-bice.vercel.app/" target="_blank" rel="noopener" class="featured-link-btn">
+                  Live Demo
+                  <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                </a>
+                <button type="button" class="featured-link-btn featured-preview-btn" onclick="openPreviewModal('studypath')">
+                  Preview
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <!-- SmartInvoice Africa -->
-          <div class="featured-card">
-            <div class="featured-img-container">
+          <div class="featured-card" data-project-id="smartinvoice">
+            <div class="featured-img-container" onclick="openPreviewModal('smartinvoice')" title="Click to preview SmartInvoice Africa">
               <img src="./smartinvoice.png" alt="SmartInvoice Africa Dashboard Mockup" loading="lazy">
+              <div class="featured-img-overlay">
+                <span class="preview-badge-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Quick Preview
+                </span>
+              </div>
             </div>
             <div class="featured-info">
               <div>
@@ -1552,7 +1868,7 @@
                 </div>
                 <h3 class="featured-title">SmartInvoice Africa</h3>
                 <p class="featured-desc">
-                  A high-end invoice management and financial operations platform optimized for businesses across Africa. Features real-time VAT & tax calculations, currency conversions (NGN, KES, USD), multi-customer analytics, WhatsApp invoice notifications, and automated cash flow reports.
+                  A high-end invoice management and financial operations platform optimized for businesses across Africa. Features real-time VAT &amp; tax calculations, currency conversions (NGN, KES, USD), multi-customer analytics, WhatsApp invoice notifications, and automated cash flow reports.
                 </p>
               </div>
               <div class="featured-links">
@@ -1560,14 +1876,24 @@
                   Live Demo
                   <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
                 </a>
+                <button type="button" class="featured-link-btn featured-preview-btn" onclick="openPreviewModal('smartinvoice')">
+                  Preview
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
             </div>
           </div>
 
           <!-- CampusVote -->
-          <div class="featured-card">
-            <div class="featured-img-container">
+          <div class="featured-card" data-project-id="campusvote">
+            <div class="featured-img-container" onclick="openPreviewModal('campusvote')" title="Click to preview CampusVote">
               <img src="./campusvote.png" alt="CampusVote Landing Mockup" loading="lazy">
+              <div class="featured-img-overlay">
+                <span class="preview-badge-btn">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Quick Preview
+                </span>
+              </div>
             </div>
             <div class="featured-info">
               <div>
@@ -1589,35 +1915,10 @@
                   Live Demo
                   <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
                 </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Phishing Guard -->
-          <div class="featured-card">
-            <div class="featured-img-container">
-              <img src="./phishing-guard.png" alt="Phishing Guard Dashboard Mockup" loading="lazy">
-            </div>
-            <div class="featured-info">
-              <div>
-                <div class="featured-meta">
-                  <div class="featured-tags">
-                    <span class="featured-tag">JavaScript</span>
-                    <span class="featured-tag">NLP Model</span>
-                    <span class="featured-tag">Chrome API</span>
-                    <span class="featured-tag">Tailwind</span>
-                  </div>
-                </div>
-                <h3 class="featured-title">Phishing Guard</h3>
-                <p class="featured-desc">
-                  An email safety scanner and phishing guard extension dashboard. Implements natural language classification vectors, threat scoring gauges, safety alerts, key risk analysis graphs, and domain registration lookup details to notify users about credential theft vectors in real-time.
-                </p>
-              </div>
-              <div class="featured-links">
-                <a href="https://github.com/Dave-dDev/phishing-guard" target="_blank" rel="noopener" class="featured-link-btn">
-                  GitHub Repo
-                  <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-                </a>
+                <button type="button" class="featured-link-btn featured-preview-btn" onclick="openPreviewModal('campusvote')">
+                  Preview
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -1800,11 +2101,435 @@
     </div>
   </footer>
 
+  <!-- PROJECT PREVIEW MODAL -->
+  <div id="project-preview-modal" class="preview-modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="preview-modal-card" id="preview-modal-card">
+      <div class="preview-modal-header">
+        <div class="preview-modal-title-group">
+          <span class="card-title" style="margin-bottom:0;" id="modal-project-badge">Featured Client Project</span>
+          <h3 class="preview-modal-title" id="modal-project-title">Project Title</h3>
+        </div>
+        <button class="preview-modal-close-btn" id="modal-close-btn" aria-label="Close preview modal">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="preview-modal-body">
+        <div class="preview-frame-wrap">
+          <div class="preview-browser-bar">
+            <div class="browser-dots">
+              <span class="browser-dot dot-red"></span>
+              <span class="browser-dot dot-yellow"></span>
+              <span class="browser-dot dot-green"></span>
+            </div>
+            <div class="browser-url-bar" id="modal-browser-url">https://...</div>
+          </div>
+          <div class="preview-image-container">
+            <img id="modal-preview-img" src="" alt="Project Preview">
+          </div>
+        </div>
+        <div class="modal-info-block">
+          <div class="featured-tags" id="modal-project-tags" style="margin-bottom: 0.75rem;"></div>
+          <p class="featured-desc" id="modal-project-desc" style="margin-bottom: 1rem;"></p>
+          <div class="preview-highlights" id="modal-project-highlights"></div>
+        </div>
+      </div>
+      <div class="preview-modal-footer">
+        <button type="button" class="btn-secondary" id="modal-dismiss-btn" style="padding: 0.7rem 1.4rem; font-size: 0.85rem; border-radius: 12px; cursor: pointer;">Close</button>
+        <a href="#" target="_blank" rel="noopener" class="cta-btn" id="modal-live-link">
+          Open Live App
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP & SMOOTH SCROLLING LIBRARIES -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
   <!-- JAVASCRIPT LOGIC -->
   <script>
     /* ─── STORES / GLOBAL VARIABLES ─── */
     const GITHUB_USER = 'Dave-dDev';
     let fetchedRepos = [];
+
+    /* ─── MODULAR FEATURED PROJECTS STORE ─── */
+    const FEATURED_PROJECTS = [
+      {
+        id: 'studypath',
+        title: 'StudyPath',
+        category: 'AI-Powered Study Platform',
+        description: 'An intelligent AI-powered study platform that transforms raw notes and textbooks into personalised quizzes, SM-2 spaced repetition flashcards, and Feynman summaries in seconds.',
+        tags: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript', 'AI / NLP', 'Vercel'],
+        image: './studypath.png',
+        liveUrl: 'https://study-path-bice.vercel.app/',
+        highlights: [
+          'Automated dynamic quiz generator (MCQ, True/False, Short Answer)',
+          'SM-2 algorithmic spaced repetition flashcards',
+          'Feynman technique plain-language concept summaries',
+          'Adaptive challenge difficulty based on live performance'
+        ]
+      },
+      {
+        id: 'smartinvoice',
+        title: 'SmartInvoice Africa',
+        category: 'Fintech Operations & Invoicing',
+        description: 'A high-end invoice management and financial operations platform optimized for businesses across Africa. Features real-time VAT & tax calculations, currency conversions (NGN, KES, USD), multi-customer analytics, WhatsApp invoice notifications, and automated cash flow reports.',
+        tags: ['React', 'Tailwind CSS', 'Next.js', 'Vercel'],
+        image: './smartinvoice.png',
+        liveUrl: 'https://smartinvoice-africa.vercel.app/',
+        highlights: [
+          'Localized African VAT & tax computation engine',
+          'Automated WhatsApp client invoices & payment reminders',
+          'Accounts receivable analytics and cash-flow reporting'
+        ]
+      },
+      {
+        id: 'campusvote',
+        title: 'CampusVote',
+        category: 'Decentralized Ballot System',
+        description: 'A state-of-the-art secure digital ballot system that empowers campus voices. Uses cryptographic audit logs for verification, ranked-choice runoff calculations, multi-candidate listings, and secure registration gates to guarantee transparent, tamper-proof student elections.',
+        tags: ['React', 'Next.js', 'Tailwind CSS', 'Vercel'],
+        image: './campusvote.png',
+        liveUrl: 'https://votin-port.vercel.app/',
+        highlights: [
+          'Cryptographic verifiable audit trails for vote integrity',
+          'Ranked-choice runoff voting algorithm implementation',
+          'Secure student authentication gates & real-time tallies'
+        ]
+      }
+    ];
+
+    /* ─── DYNAMIC RENDERER FOR FEATURED PROJECTS (MODULAR ARCHITECTURE) ─── */
+    function renderFeaturedProjects() {
+      const container = document.getElementById('featured-projects-container');
+      if (!container) return;
+
+      container.innerHTML = FEATURED_PROJECTS.map(proj => `
+        <article class="featured-card" data-project-id="${proj.id}">
+          <div class="featured-img-container" onclick="openPreviewModal('${proj.id}')" title="Click to preview ${proj.title}">
+            <img src="${proj.image}" alt="${proj.title} Mockup" loading="lazy">
+            <div class="featured-img-overlay">
+              <span class="preview-badge-btn">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Quick Preview
+              </span>
+            </div>
+          </div>
+          <div class="featured-info">
+            <div>
+              <div class="featured-meta">
+                <div class="featured-tags">
+                  ${proj.tags.map(t => `<span class="featured-tag">${t}</span>`).join('')}
+                </div>
+              </div>
+              <h3 class="featured-title">${proj.title}</h3>
+              <p class="featured-desc">${proj.description}</p>
+            </div>
+            <div class="featured-links">
+              <a href="${proj.liveUrl}" target="_blank" rel="noopener" class="featured-link-btn">
+                Live Demo
+                <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+              </a>
+              <button type="button" class="featured-link-btn featured-preview-btn" onclick="openPreviewModal('${proj.id}')">
+                Preview
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      initProjectCardInteractions();
+    }
+
+    /* ─── INTERACTIVE PREVIEW MODAL CONTROLLERS ─── */
+    function openPreviewModal(projectId) {
+      const proj = FEATURED_PROJECTS.find(p => p.id === projectId);
+      if (!proj) return;
+
+      const modal = document.getElementById('project-preview-modal');
+      const modalCard = document.getElementById('preview-modal-card');
+      
+      document.getElementById('modal-project-badge').textContent = proj.category || 'Featured Client Project';
+      document.getElementById('modal-project-title').textContent = proj.title;
+      document.getElementById('modal-browser-url').textContent = proj.liveUrl;
+      
+      const modalImg = document.getElementById('modal-preview-img');
+      modalImg.src = proj.image;
+      modalImg.alt = `${proj.title} Preview`;
+
+      document.getElementById('modal-project-desc').textContent = proj.description;
+      
+      const tagsContainer = document.getElementById('modal-project-tags');
+      tagsContainer.innerHTML = proj.tags.map(t => `<span class="featured-tag">${t}</span>`).join('');
+      
+      const highlightsContainer = document.getElementById('modal-project-highlights');
+      highlightsContainer.innerHTML = (proj.highlights || []).map(h => `
+        <div class="preview-highlight-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>${h}</span>
+        </div>
+      `).join('');
+      
+      const liveLink = document.getElementById('modal-live-link');
+      liveLink.href = proj.liveUrl;
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      // GSAP smooth entrance
+      if (typeof gsap !== 'undefined') {
+        gsap.killTweensOf([modal, modalCard]);
+        gsap.fromTo(modal, 
+          { opacity: 0 }, 
+          { opacity: 1, duration: 0.3, ease: 'power2.out' }
+        );
+        gsap.fromTo(modalCard, 
+          { scale: 0.88, opacity: 0, y: 30 }, 
+          { scale: 1, opacity: 1, y: 0, duration: 0.45, ease: 'back.out(1.6)' }
+        );
+      }
+    }
+
+    function closePreviewModal() {
+      const modal = document.getElementById('project-preview-modal');
+      const modalCard = document.getElementById('preview-modal-card');
+      if (!modal || !modal.classList.contains('open')) return;
+
+      if (typeof gsap !== 'undefined') {
+        gsap.to(modalCard, {
+          scale: 0.92,
+          opacity: 0,
+          y: 15,
+          duration: 0.25,
+          ease: 'power2.in'
+        });
+        gsap.to(modal, {
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.in',
+          onComplete: () => {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+          }
+        });
+      } else {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Modal event listeners
+    document.getElementById('modal-close-btn')?.addEventListener('click', closePreviewModal);
+    document.getElementById('modal-dismiss-btn')?.addEventListener('click', closePreviewModal);
+    document.getElementById('project-preview-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'project-preview-modal') {
+        closePreviewModal();
+      }
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePreviewModal();
+    });
+
+    /* ─── 3D CARD TILT MICRO-INTERACTIONS (GSAP quickTo) ─── */
+    function initProjectCardInteractions() {
+      if (typeof gsap === 'undefined') return;
+      const cards = document.querySelectorAll('.featured-card');
+      cards.forEach(card => {
+        const setRotateX = gsap.quickTo(card, "rotationX", { duration: 0.35, ease: "power2.out" });
+        const setRotateY = gsap.quickTo(card, "rotationY", { duration: 0.35, ease: "power2.out" });
+        const setY = gsap.quickTo(card, "y", { duration: 0.35, ease: "power2.out" });
+
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          const rotY = (x / (rect.width / 2)) * 5;
+          const rotX = -(y / (rect.height / 2)) * 5;
+          
+          setRotateX(rotX);
+          setRotateY(rotY);
+          setY(-5);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          setRotateX(0);
+          setRotateY(0);
+          setY(0);
+        });
+      });
+    }
+
+    /* ─── GSAP & SCROLLTRIGGER ENTRANCES + LENIS SMOOTH SCROLL ─── */
+    function initGSAPAnimations() {
+      if (typeof gsap === 'undefined') return;
+
+      if (typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+
+      // Initialize Lenis Smooth Scroll
+      if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 1.5,
+        });
+
+        if (typeof ScrollTrigger !== 'undefined') {
+          lenis.on('scroll', ScrollTrigger.update);
+        }
+
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+
+        gsap.ticker.lagSmoothing(0);
+
+        // Smooth navigation anchor scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              lenis.scrollTo(target, { offset: -90, duration: 1.2 });
+            }
+          });
+        });
+      }
+
+      // 1. HERO ENTRANCE TIMELINE
+      const heroTL = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      heroTL.from('nav', {
+        y: -40,
+        opacity: 0,
+        duration: 0.9,
+        ease: 'power3.out'
+      });
+
+      heroTL.from('.cell-hero .status-badge', {
+        scale: 0.75,
+        opacity: 0,
+        duration: 0.5,
+        ease: 'back.out(2)'
+      }, '-=0.4');
+
+      heroTL.from('.cell-hero .hero-intro, .cell-hero .hero-name, .cell-hero .hero-headline', {
+        y: 25,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.1
+      }, '-=0.3');
+
+      heroTL.from('.cell-hero .hero-actions .cta-btn, .cell-hero .hero-actions .btn-secondary', {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1
+      }, '-=0.3');
+
+      heroTL.from('.cell-clock, .cell-location, .cell-skills, .cell-github-stats, .cell-socials', {
+        y: 35,
+        opacity: 0,
+        scale: 0.98,
+        duration: 0.8,
+        stagger: 0.08,
+        ease: 'power3.out'
+      }, '-=0.4');
+
+      // 2. SCROLLTRIGGER REVEALS
+      if (typeof ScrollTrigger !== 'undefined') {
+        // Projects Header
+        gsap.from('#projects-bento .projects-header', {
+          scrollTrigger: {
+            trigger: '#projects-bento',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+
+        // Featured Project Cards Stagger
+        gsap.from('.featured-card', {
+          scrollTrigger: {
+            trigger: '#featured-projects-container',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          },
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out'
+        });
+
+        // Parallax depth on card images during scroll
+        document.querySelectorAll('.featured-img-container img').forEach(img => {
+          gsap.to(img, {
+            scrollTrigger: {
+              trigger: img,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.2
+            },
+            yPercent: 6,
+            ease: 'none'
+          });
+        });
+
+        // GitHub Repos grid reveal
+        gsap.from('#bento-projects-grid', {
+          scrollTrigger: {
+            trigger: '#bento-projects-grid',
+            start: 'top 88%',
+            toggleActions: 'play none none reverse'
+          },
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.out'
+        });
+
+        // Experience & Education Timeline reveal
+        gsap.from('#experience-bento', {
+          scrollTrigger: {
+            trigger: '#experience-bento',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          },
+          y: 35,
+          opacity: 0,
+          duration: 0.85,
+          ease: 'power3.out'
+        });
+
+        gsap.from('.timeline-item', {
+          scrollTrigger: {
+            trigger: '#experience-list',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          },
+          y: 20,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'power2.out'
+        });
+      }
+    }
 
     const langColors = {
       JavaScript: '#f7df1e',
@@ -1915,20 +2640,33 @@
       const activeList = item.parentElement;
       const allItems = activeList.querySelectorAll('.timeline-item');
       allItems.forEach(i => {
-        if (i !== item) {
+        if (i !== item && i.classList.contains('expanded')) {
           i.classList.remove('expanded');
-          i.querySelector('.timeline-body').style.maxHeight = null;
+          const otherBody = i.querySelector('.timeline-body');
+          if (typeof gsap !== 'undefined') {
+            gsap.to(otherBody, { maxHeight: 0, duration: 0.35, ease: 'power2.inOut' });
+          } else {
+            otherBody.style.maxHeight = null;
+          }
         }
       });
 
       // Toggle current item
       if (isExpanded) {
         item.classList.remove('expanded');
-        body.style.maxHeight = null;
+        if (typeof gsap !== 'undefined') {
+          gsap.to(body, { maxHeight: 0, duration: 0.35, ease: 'power2.inOut' });
+        } else {
+          body.style.maxHeight = null;
+        }
       } else {
         item.classList.add('expanded');
-        // Set height dynamically for transition
-        body.style.maxHeight = body.scrollHeight + 'px';
+        const scrollH = body.scrollHeight;
+        if (typeof gsap !== 'undefined') {
+          gsap.fromTo(body, { maxHeight: 0 }, { maxHeight: scrollH, duration: 0.4, ease: 'power2.out' });
+        } else {
+          body.style.maxHeight = scrollH + 'px';
+        }
       }
     }
 
@@ -2052,7 +2790,7 @@
     function renderFallbackRepos() {
       const grid = document.getElementById('bento-projects-grid');
       const fallbacks = [
-        { name: 'phishing-guard', language: 'JavaScript', description: 'A Chrome extension dashboard analyzing phishing email vectors using NLP models.', stargazers_count: 3, forks_count: 1, html_url: 'https://github.com/Dave-dDev/phishing-guard' },
+        { name: 'studypath', language: 'TypeScript', description: 'An AI-powered study platform turning notes into quizzes, flashcards, and Feynman summaries.', stargazers_count: 5, forks_count: 1, html_url: 'https://study-path-bice.vercel.app/' },
         { name: 'Portfolio Bento', language: 'HTML', description: 'A responsive grid-based personal homepage featuring modular interactive widgets.', stargazers_count: 5, forks_count: 0, html_url: 'https://github.com/Dave-dDev' },
         { name: 'Web Experiments', language: 'TypeScript', description: 'Collection of frontend layouts, CSS graphics, and structural micro-interactions.', stargazers_count: 2, forks_count: 0, html_url: 'https://github.com/Dave-dDev' }
       ];
@@ -2076,6 +2814,8 @@
     }
 
     /* ─── INITIALIZATION ─── */
+    renderFeaturedProjects();
+    initGSAPAnimations();
     fetchGitHubData();
   </script>
 </body>
